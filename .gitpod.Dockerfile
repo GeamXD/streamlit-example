@@ -1,10 +1,20 @@
-FROM gitpod/workspace-full
+FROM ubuntu:latest
 
-USER gitpod
+# Install necessary utilities
+RUN apt-get update && \
+    apt-get install -y wget apt-transport-https software-properties-common
 
-RUN wget https://dot.net/v1/dotnet-install.sh \
-    && chmod +x dotnet-install.sh \
-    && ./dotnet-install.sh --version 8.0.1 --install-dir /home/gitpod/.dotnet \
-    && rm dotnet-install.sh
+# Download the Microsoft repository GPG keys
+RUN wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
 
-ENV PATH="/home/gitpod/.dotnet:${PATH}"
+# Register the Microsoft repository GPG keys
+RUN dpkg -i packages-microsoft-prod.deb
+
+# Update the package list and install the .NET SDK
+RUN apt-get update; \
+    apt-get install -y dotnet-sdk-8.0
+
+# Clean up
+RUN rm packages-microsoft-prod.deb && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
