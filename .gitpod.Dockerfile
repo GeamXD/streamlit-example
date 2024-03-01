@@ -2,7 +2,7 @@ FROM ubuntu:latest
 
 # Install necessary utilities
 RUN apt-get update && \
-    apt-get install -y wget apt-transport-https software-properties-common
+    apt-get install -y wget apt-transport-https software-properties-common git
 
 # Download the Microsoft repository GPG keys
 RUN wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
