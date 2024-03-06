@@ -1,20 +1,17 @@
-FROM ubuntu:latest
+FROM gitpod/workspace-full
 
-# Install necessary utilities
-RUN apt-get update && \
-    apt-get install -y wget apt-transport-https software-properties-common git
+# Install .NET Core SDK
+RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
+    && sudo dpkg -i packages-microsoft-prod.deb \
+    && sudo apt-get update \
+    && sudo apt-get install -y apt-transport-https \
+    && sudo apt-get update \
+    && sudo apt-get install -y dotnet-sdk-8.0
 
-# Download the Microsoft repository GPG keys
-RUN wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
+# Install npm
+# (npm is usually included in the gitpod/workspace-full image, but if needed, you can install or update it like this)
+RUN sudo apt-get install -y npm
 
-# Register the Microsoft repository GPG keys
-RUN dpkg -i packages-microsoft-prod.deb
-
-# Update the package list and install the .NET SDK
-RUN apt-get update; \
-    apt-get install -y dotnet-sdk-8.0
-
-# Clean up
-RUN rm packages-microsoft-prod.deb && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Install Git
+# (Git is also usually included, but here's how you can ensure it's installed)
+RUN sudo apt-get install -y git
